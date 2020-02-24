@@ -1,7 +1,6 @@
 package stepdefinitions;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
@@ -9,13 +8,12 @@ import org.test.assignment.base.Browser;
 import org.test.assignment.helper.PropertiesFile;
 import org.test.assignment.pages.AddNewEmployee;
 import org.test.assignment.pages.Home;
-import org.testng.Assert;
 
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Then;
 import cucumber.api.java.en.When;
 
-public class TC05 {
+public class TC05_VerifyEmployeeRecordOnDifferentSession {
 	
 	public static WebDriver driver;
 	String url;
@@ -23,7 +21,7 @@ public class TC05 {
 	Home home;
 	AddNewEmployee addnewemployee;
 	String firstname;
-	public static WebElement findEmployee; 
+	//public WebElement findEmployee; 
 	
 	@When("^I open the application and create new employee$")
 	public void i_open_the_application_and_create_new_employee() throws Throwable {
@@ -43,9 +41,9 @@ public class TC05 {
 		addnewemployee.selectJobTitle(jobtitle);
 		addnewemployee.selectCurrentProject(currentproject);
 		addnewemployee.clickCreateEmployeeBtn();
-		findEmployee= driver.findElement(By.xpath("//*[text()='"+firstname+"']"));
+		WebElement findEmployee= driver.findElement(By.xpath("//*[text()='"+firstname+"']"));
 		System.out.println(findEmployee.getText().toString());
-	}
+	}	
 
 	@And("^close the browser$")
 	public void close_the_browser() throws Throwable {
@@ -61,24 +59,36 @@ public class TC05 {
 		browser.launchApplication(driver, url);		
 	}
 
-	@Then("^newly created employee \"(.*?)\" should be present$")
-	public void newly_created_employee_details_should_be_present(String firstname) throws Throwable {
+	@Then("^newly created employee should be present$")
+	public void newly_created_employee_details_should_be_present() throws Throwable {
 	    
 		home = PageFactory.initElements(driver, Home.class);
-		Assert.assertEquals(true, findEmployee.isDisplayed());
-		/*
-		boolean passFail = false;
+		int element = driver.findElements(By.xpath("//*[@class='card-title']")).size();
+		/*try {
+			
+			if(element>2) {
+				System.out.println("Record is Present");
+			}
+							
+		}catch(Exception e) {
+			System.out.println("Record is not present");
+			throw new java.lang.AssertionError();
+		}
+		finally {
+			driver.quit();
+		}*/
+		
 		try {
-	        if (driver.findElement(By.xpath("//*[text()='"+firstname+"']")).isDisplayed())
-	        	Assert.assertTrue(passFail=true);
-	    } catch (NoSuchElementException e) {
-	        System.err.println("Unable to locate element");
-	    } catch (Exception e) {
-	        System.err.println("Unable to check display status of element");
-	        e.printStackTrace();
-	    }
-		finally {driver.quit();}*/
-
+		if(element>2) {
+			System.out.println("Record is Present");
+		}
+		else
+			throw new java.lang.AssertionError();
+		}
+		finally {
+		driver.quit();
+		}
+		
 	}
 
 }

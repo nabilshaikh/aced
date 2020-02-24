@@ -5,7 +5,7 @@ Feature: Test to check the presence of newly created employee on reopening the b
     And save the details by entering "<firstname>","<lastname>","<jobtitle>" and "<currentproject>"
     And close the browser
     And reopen the browser
-    Then newly created employee "<firstname>" should be present
+    Then newly created employee should be present
     
     Examples:
     	|firstname|lastname|  jobtitle  |currentproject|
